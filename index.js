@@ -25,10 +25,9 @@ const replaceTemplate = (temp, product) => {
 }
 
 const server = http.createServer((req, res) => {
-    const pathName = req.url;
-    //console.log(req.url);
-    //res.end('Hello from the server');
-    if (pathName === '/' || pathName === '/overview') {
+    const { query, pathname } = url.parse(req.url, true);
+
+    if (pathname === '/' || pathname === '/overview') {
         res.writeHead(200, {
             'Content-type': 'text/html'
         });
@@ -37,12 +36,14 @@ const server = http.createServer((req, res) => {
         const output = tempOverview.replace('{%CARDS%}', cardsHTML);
         res.end(output);
 
-    } else if (pathName === '/product') {
+    } else if (pathname === '/product') {
         res.writeHead(200, {
             'Content-type': 'text/html'});
-        res.end(tempProduct)
+        const product = dataObj[query.id];
+        const output = replaceTemplate(tempProduct, product);
+        res.end(output);
 
-    } else if (pathName === '/api') {
+    } else if (pathname === '/api') {
         // fs.readFile(`${__dirname}/dev-data/data.json`, 'utf-8', (err, data) => { 
         //     const productData = JSON.parse(data);
         res.writeHead(200, {
