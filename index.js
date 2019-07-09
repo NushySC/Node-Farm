@@ -14,7 +14,10 @@ const tempCard = fs.readFileSync(`${__dirname}/templates/template-card.html`, 'u
 
 
 const server = http.createServer((req, res) => {
-    const { query, pathname } = url.parse(req.url, true);
+    const {
+        query,
+        pathname
+    } = url.parse(req.url, true);
 
     if (pathname === '/' || pathname === '/overview') {
         res.writeHead(200, {
@@ -27,7 +30,8 @@ const server = http.createServer((req, res) => {
 
     } else if (pathname === '/product') {
         res.writeHead(200, {
-            'Content-type': 'text/html'});
+            'Content-type': 'text/html'
+        });
         const product = dataObj[query.id];
         const output = replaceTemplate(tempProduct, product);
         res.end(output);
@@ -36,13 +40,15 @@ const server = http.createServer((req, res) => {
         // fs.readFile(`${__dirname}/dev-data/data.json`, 'utf-8', (err, data) => { 
         //     const productData = JSON.parse(data);
         res.writeHead(200, {
-            'Content-type': 'application/json'});
+            'Content-type': 'application/json'
+        });
         //console.log(productData);
         res.end(data);
 
     } else {
         res.writeHead(404, {
-            'Content-type': 'text/html',});
+            "Content-type": 'text/html',
+        });
         res.end('<h1>Page not found</h1>')
     }
 });
